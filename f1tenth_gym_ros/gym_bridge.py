@@ -52,6 +52,7 @@ class GymBridge(Node):
         self.declare_parameter('opp_ego_odom_topic')
         self.declare_parameter('opp_scan_topic')
         self.declare_parameter('opp_drive_topic')
+        self.declare_parameter('base_frame')
         self.declare_parameter('front_left_hinge_link_name')
         self.declare_parameter('front_left_wheel_link_name')
         self.declare_parameter('front_right_hinge_link_name')
@@ -291,7 +292,7 @@ class GymBridge(Node):
         ego_odom = Odometry()
         ego_odom.header.stamp = ts
         ego_odom.header.frame_id = 'map'
-        ego_odom.child_frame_id = self.ego_namespace + '/base_link'
+        ego_odom.child_frame_id = self.ego_namespace + '/' + self.get_parameter('base_frame').value
         ego_odom.pose.pose.position.x = self.ego_pose[0]
         ego_odom.pose.pose.position.y = self.ego_pose[1]
         ego_quat = euler.euler2quat(0., 0., self.ego_pose[2], axes='sxyz')
@@ -308,7 +309,7 @@ class GymBridge(Node):
             opp_odom = Odometry()
             opp_odom.header.stamp = ts
             opp_odom.header.frame_id = 'map'
-            opp_odom.child_frame_id = self.opp_namespace + '/base_link'
+            opp_odom.child_frame_id = self.opp_namespace + '/' + self.get_parameter('base_frame').value
             opp_odom.pose.pose.position.x = self.opp_pose[0]
             opp_odom.pose.pose.position.y = self.opp_pose[1]
             opp_quat = euler.euler2quat(0., 0., self.opp_pose[2], axes='sxyz')
@@ -338,7 +339,7 @@ class GymBridge(Node):
         ego_ts.transform = ego_t
         ego_ts.header.stamp = ts
         ego_ts.header.frame_id = 'map'
-        ego_ts.child_frame_id = self.ego_namespace + '/base_link'
+        ego_ts.child_frame_id = self.ego_namespace + '/' + self.get_parameter('base_frame').value
         self.br.sendTransform(ego_ts)
 
         if self.has_opp:
@@ -356,7 +357,7 @@ class GymBridge(Node):
             opp_ts.transform = opp_t
             opp_ts.header.stamp = ts
             opp_ts.header.frame_id = 'map'
-            opp_ts.child_frame_id = self.opp_namespace + '/base_link'
+            opp_ts.child_frame_id = self.opp_namespace + '/' + self.get_parameter('base_frame').value
             self.br.sendTransform(opp_ts)
 
     def _publish_wheel_transforms(self, ts):
