@@ -52,6 +52,12 @@ class GymBridge(Node):
         self.declare_parameter('opp_ego_odom_topic')
         self.declare_parameter('opp_scan_topic')
         self.declare_parameter('opp_drive_topic')
+        self.declare_parameter('front_left_hinge_link_name')
+        self.declare_parameter('front_left_wheel_link_name')
+        self.declare_parameter('front_right_hinge_link_name')
+        self.declare_parameter('front_right_wheel_link_name')
+        self.declare_parameter('lidar_link_name')
+        self.declare_parameter('laser_frame_name')
         self.declare_parameter('scan_distance_to_base_link')
         self.declare_parameter('scan_fov')
         self.declare_parameter('scan_beams')
@@ -361,11 +367,11 @@ class GymBridge(Node):
         ego_wheel_ts.transform.rotation.z = ego_wheel_quat[3]
         ego_wheel_ts.transform.rotation.w = ego_wheel_quat[0]
         ego_wheel_ts.header.stamp = ts
-        ego_wheel_ts.header.frame_id = self.ego_namespace + '/front_left_hinge'
-        ego_wheel_ts.child_frame_id = self.ego_namespace + '/front_left_wheel'
+        ego_wheel_ts.header.frame_id = self.ego_namespace + '/' + self.get_parameter('front_left_hinge_link_name').value
+        ego_wheel_ts.child_frame_id = self.ego_namespace + '/' + self.get_parameter('front_left_wheel_link_name').value
         self.br.sendTransform(ego_wheel_ts)
-        ego_wheel_ts.header.frame_id = self.ego_namespace + '/front_right_hinge'
-        ego_wheel_ts.child_frame_id = self.ego_namespace + '/front_right_wheel'
+        ego_wheel_ts.header.frame_id = self.ego_namespace + '/' + self.get_parameter('front_right_hinge_link_name').value
+        ego_wheel_ts.child_frame_id = self.ego_namespace + '/' + self.get_parameter('front_right_wheel_link_name').value
         self.br.sendTransform(ego_wheel_ts)
 
         if self.has_opp:
@@ -376,11 +382,11 @@ class GymBridge(Node):
             opp_wheel_ts.transform.rotation.z = opp_wheel_quat[3]
             opp_wheel_ts.transform.rotation.w = opp_wheel_quat[0]
             opp_wheel_ts.header.stamp = ts
-            opp_wheel_ts.header.frame_id = self.opp_namespace + '/front_left_hinge'
-            opp_wheel_ts.child_frame_id = self.opp_namespace + '/front_left_wheel'
+            opp_wheel_ts.header.frame_id = self.opp_namespace + '/' + self.get_parameter('front_left_hinge_link_name').value
+            opp_wheel_ts.child_frame_id = self.opp_namespace + '/' + self.get_parameter('front_left_wheel_link_name').value
             self.br.sendTransform(opp_wheel_ts)
-            opp_wheel_ts.header.frame_id = self.opp_namespace + '/front_right_hinge'
-            opp_wheel_ts.child_frame_id = self.opp_namespace + '/front_right_wheel'
+            opp_wheel_ts.header.frame_id = self.opp_namespace + '/' + self.get_parameter('front_right_hinge_link_name').value
+            opp_wheel_ts.child_frame_id = self.opp_namespace + '/' + self.get_parameter('front_right_wheel_link_name').value
             self.br.sendTransform(opp_wheel_ts)
 
     def _publish_laser_transforms(self, ts):
@@ -389,8 +395,8 @@ class GymBridge(Node):
         # ego_scan_ts.transform.translation.z = 0.04+0.1+0.025
         ego_scan_ts.transform.rotation.w = 1.
         ego_scan_ts.header.stamp = ts
-        ego_scan_ts.header.frame_id = self.ego_namespace + '/base_link'
-        ego_scan_ts.child_frame_id = self.ego_namespace + '/laser'
+        ego_scan_ts.header.frame_id = self.ego_namespace + '/' + self.get_parameter('lidar_link_name').value
+        ego_scan_ts.child_frame_id = self.ego_namespace + '/' + self.get_parameter('laser_frame_name').value
         self.br.sendTransform(ego_scan_ts)
 
         if self.has_opp:
@@ -398,8 +404,8 @@ class GymBridge(Node):
             opp_scan_ts.transform.translation.x = self.scan_distance_to_base_link
             opp_scan_ts.transform.rotation.w = 1.
             opp_scan_ts.header.stamp = ts
-            opp_scan_ts.header.frame_id = self.opp_namespace + '/base_link'
-            opp_scan_ts.child_frame_id = self.opp_namespace + '/laser'
+            opp_scan_ts.header.frame_id = self.opp_namespace + '/' + self.get_parameter('lidar_link_name').value
+            opp_scan_ts.child_frame_id = self.opp_namespace + '/' + self.get_parameter('laser_frame_name').value
             self.br.sendTransform(opp_scan_ts)
 
 def main(args=None):

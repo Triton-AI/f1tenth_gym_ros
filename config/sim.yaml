@@ -34,6 +34,15 @@ bridge:
     opp_ego_odom_topic: 'opp_odom'
     opp_drive_topic: 'opp_drive'
 
+    # for publishing transforms properly, 
+    # it'd be consider same format for both agents' namespaces.
+    front_left_hinge_link_name: 'front_left_hinge'
+    front_left_wheel_link_name: 'front_left_wheel'
+    front_right_hinge_link_name: 'front_right_hinge'
+    front_right_wheel_link_name: 'front_right_wheel'
+    lidar_link_name: 'base_link'
+    laser_frame_name: 'laser'
+
     # transform related
     scan_distance_to_base_link: 0.0
     
@@ -42,7 +51,7 @@ bridge:
     scan_beams: 1080
 
     # map parameters
-    map_path: '/sim_ws/src/f1tenth_gym_ros/maps/levine'
+    map_path: '/home/projects/f1tenth_ws/src/external/f1tenth_sim/f1tenth_gym_ros/maps/levine'
     map_img_ext: '.png'
 
     # opponent parameters
