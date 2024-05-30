@@ -73,21 +73,21 @@ def generate_launch_description():
         executable='robot_state_publisher',
         name='ego_robot_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', os.path.join(get_package_share_directory('f1tenth_gym_ros'), 'launch', 'ego_racecar.xacro')])}],
-        remappings=[('/robot_description', 'ego_robot_description')]
+        remappings=[('/robot_description', '/ego_racecar/robot_description')]
     )
     opp_robot_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='opp_robot_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', os.path.join(get_package_share_directory('f1tenth_gym_ros'), 'launch', 'opp_racecar.xacro')])}],
-        remappings=[('/robot_description', 'opp_robot_description')]
+        remappings=[('/robot_description', '/opp_racecar/robot_description')]
     )
 
     # finalize
     ld.add_action(bridge_node)
     ld.add_action(nav_lifecycle_node)
     ld.add_action(map_server_node)
-    
+
     if config_dict['bridge']['ros__parameters']['launch_rviz']:
         ld.add_action(rviz_node)
 
